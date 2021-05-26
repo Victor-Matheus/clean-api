@@ -41,7 +41,12 @@ export class SignUpController implements Controller {
         email: email,
         password: password
       }
-      this.addAccount.add(_account)
+      const account = this.addAccount.add(_account)
+      const returnObject = {
+        statusCode: 200,
+        body: account
+      }
+      return returnObject
     } catch {
       return internalServerError()
     }
