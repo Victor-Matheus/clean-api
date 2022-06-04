@@ -3,5 +3,9 @@ export interface ILoadFacebookUserApi {
 }
 
 export namespace ILoadFacebookUserApi {
-  export type GetUserBytokenResult = string | undefined
+  export type GetUserBytokenResult = {
+    id: string
+    email: string
+    name: string
+  } | undefined
 }
