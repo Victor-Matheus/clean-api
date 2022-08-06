@@ -2,12 +2,12 @@ import { AuthenticationError } from '@/domain/errors'
 import { FacebookAuthentication } from '@/domain/features'
 import { AccessToken } from '@/domain/models'
 import { ILoadFacebookUserApi } from '@/data/contracts/apis'
-import { IUserAccountRepository } from '@/data/contracts/repositories'
+import { ICustomerRepository } from '@/data/contracts/repositories'
 
 export class FacebookAuthenticationService implements FacebookAuthentication {
   constructor (
     private readonly facebookUserByApi: ILoadFacebookUserApi,
-    private readonly userAccountRepository: IUserAccountRepository
+    private readonly userAccountRepository: ICustomerRepository
   ) {}
 
   async auth (params: FacebookAuthentication.Params): Promise<AccessToken | AuthenticationError> {
@@ -15,7 +15,7 @@ export class FacebookAuthenticationService implements FacebookAuthentication {
 
     if (facebookUserFound === undefined) return new AuthenticationError()
 
-    const userExists = await this.userAccountRepository.getUserAccountByEmail(facebookUserFound.email)
+    const userExists = await this.userAccountRepository.getCustomerAccountByEmail(facebookUserFound.email)
 
     if (userExists === undefined) return new AuthenticationError()
 

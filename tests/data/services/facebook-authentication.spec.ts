@@ -2,12 +2,12 @@ import { AuthenticationError } from '@/domain/errors'
 import { FacebookAuthenticationService } from '@/data/services'
 import { mock, MockProxy } from 'jest-mock-extended'
 import { ILoadFacebookUserApi } from '@/data/contracts/apis'
-import { IUserAccountRepository } from '../contracts/repositories'
+import { ICustomerRepository } from '../contracts/repositories'
 
 describe('FacebookAuthenticationService', () => {
   let facebookUserApiSpy: MockProxy<ILoadFacebookUserApi>
 
-  let userAccountRepoSpy: MockProxy<IUserAccountRepository>
+  let customerAccountRepoSpy: MockProxy<ICustomerRepository>
 
   let sut: FacebookAuthenticationService
 
@@ -15,9 +15,9 @@ describe('FacebookAuthenticationService', () => {
 
   beforeEach(() => {
     facebookUserApiSpy = mock<ILoadFacebookUserApi>()
-    userAccountRepoSpy = mock<IUserAccountRepository>()
+    customerAccountRepoSpy = mock<ICustomerRepository>()
 
-    sut = new FacebookAuthenticationService(facebookUserApiSpy, userAccountRepoSpy)
+    sut = new FacebookAuthenticationService(facebookUserApiSpy, customerAccountRepoSpy)
   })
 
   it('should call LoadFacebookApi with correct params', async () => {
@@ -43,7 +43,7 @@ describe('FacebookAuthenticationService', () => {
   })
 
   it('should throws if user with email not exists', async () => {
-    userAccountRepoSpy.getUserAccountByEmail.mockResolvedValueOnce(undefined)
+    customerAccountRepoSpy.getCustomerAccountByEmail.mockResolvedValueOnce(undefined)
 
     const authResult = await sut.auth({ token })
 
