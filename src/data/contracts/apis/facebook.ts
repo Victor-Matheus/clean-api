@@ -1,8 +1,8 @@
 export interface ILoadFacebookUserApi {
-  getUserByToken(token: string): Promise<ILoadFacebookUserApi.GetUserBytokenResult>
+  getUserByToken(token: string): Promise<IFacebookUserApi.GetUserBytokenResult>
 }
 
-export namespace ILoadFacebookUserApi {
+export namespace IFacebookUserApi {
   export type GetUserBytokenResult = {
     id: string
     email: string
