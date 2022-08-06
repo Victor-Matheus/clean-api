@@ -1,7 +1,7 @@
 import { Customer } from '@/domain/models/customer'
 
 export interface CreateCustomer {
-  execute(params: CreateCustomer.params): Customer
+  execute(params: CreateCustomer.params): CreateCustomer.result
 }
 
 export namespace CreateCustomer {
@@ -10,4 +10,6 @@ export namespace CreateCustomer {
     document: string
     email: string
   }
+
+  export type result = Customer
 }
