@@ -5,7 +5,7 @@ import { ILoadFacebookUserApi } from '@/data/contracts/apis'
 import { IUserAccountRepository } from '../contracts/repositories'
 
 describe('FacebookAuthenticationService', () => {
-  let loadFacebookUserApiSpy: MockProxy<ILoadFacebookUserApi>
+  let facebookUserApiSpy: MockProxy<ILoadFacebookUserApi>
 
   let userAccountRepoSpy: MockProxy<IUserAccountRepository>
 
@@ -14,28 +14,36 @@ describe('FacebookAuthenticationService', () => {
   const token = 'anyToken'
 
   beforeEach(() => {
-    loadFacebookUserApiSpy = mock<ILoadFacebookUserApi>()
+    facebookUserApiSpy = mock<ILoadFacebookUserApi>()
     userAccountRepoSpy = mock<IUserAccountRepository>()
 
-    sut = new FacebookAuthenticationService(loadFacebookUserApiSpy, userAccountRepoSpy)
+    sut = new FacebookAuthenticationService(facebookUserApiSpy, userAccountRepoSpy)
   })
 
   it('should call LoadFacebookApi with correct params', async () => {
     await sut.auth({ token })
 
-    expect(loadFacebookUserApiSpy.getUserByToken).toHaveBeenCalledWith(token)
+    expect(facebookUserApiSpy.getUserByToken).toHaveBeenCalledWith(token)
   })
 
   it('should return AuthenticationError if LoadFacebookApi returns undefined', async () => {
-    loadFacebookUserApiSpy.getUserByToken.mockResolvedValueOnce(undefined)
+    facebookUserApiSpy.getUserByToken.mockResolvedValueOnce(undefined)
 
     const authResult = await sut.auth({ token: 'token' })
 
     expect(authResult).toEqual(new AuthenticationError())
   })
 
+  it('should throws facebookApi returns undefined', async () => {
+    facebookUserApiSpy.getUserByToken.mockResolvedValueOnce(undefined)
+
+    const authResult = await sut.auth({ token })
+
+    expect(authResult).toEqual(new AuthenticationError())
+  })
+
   it('should throws if user with email not exists', async () => {
-    loadFacebookUserApiSpy.getUserByToken.mockResolvedValueOnce(undefined)
+    userAccountRepoSpy.getUserAccountByEmail.mockResolvedValueOnce(undefined)
 
     const authResult = await sut.auth({ token })
 
