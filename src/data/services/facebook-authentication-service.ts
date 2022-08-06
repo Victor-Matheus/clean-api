@@ -7,7 +7,7 @@ import { ICustomerRepository } from '@/data/contracts/repositories'
 export class FacebookAuthenticationService implements FacebookAuthentication {
   constructor (
     private readonly facebookUserByApi: ILoadFacebookUserApi,
-    private readonly userAccountRepository: ICustomerRepository
+    private readonly customerAccountRepository: ICustomerRepository
   ) {}
 
   async auth (params: FacebookAuthentication.Params): Promise<AccessToken | AuthenticationError> {
@@ -15,7 +15,7 @@ export class FacebookAuthenticationService implements FacebookAuthentication {
 
     if (facebookUserFound === undefined) return new AuthenticationError()
 
-    const userExists = await this.userAccountRepository.getCustomerAccountByEmail(facebookUserFound.email)
+    const userExists = await this.customerAccountRepository.getCustomerAccountByEmail(facebookUserFound.email)
 
     if (userExists === undefined) return new AuthenticationError()
 

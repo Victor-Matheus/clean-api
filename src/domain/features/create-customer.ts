@@ -11,5 +11,5 @@ export namespace CreateCustomer {
     email: string
   }
 
-  export type result = Customer
+  export type result = Promise<Customer>
 }
