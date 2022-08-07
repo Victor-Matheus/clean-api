@@ -30,4 +30,18 @@ describe('CreateCustomerService', () => {
 
     expect(result).toEqual(new CreateUserError())
   })
+
+  it('get customer account by email should called only once', async () => {
+    const customer: Customer = {
+      id: 'any_id',
+      name: 'any_name',
+      document: 'any_document',
+      email: 'any_email@email.com',
+      createdAt: new Date()
+    }
+
+    await sut.execute(customer)
+
+    expect(customerAccountRepoSpy.getCustomerAccountByEmail).toBeCalledTimes(1)
+  })
 })
