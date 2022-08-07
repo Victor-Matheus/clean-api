@@ -15,15 +15,15 @@ describe('CreateCustomerService', () => {
     sut = new CreateCustomerService(customerAccountRepoSpy)
   })
 
-  it('should throw if email already exists', async () => {
-    const customer: Customer = {
-      id: 'any_id',
-      name: 'any_name',
-      document: 'any_document',
-      email: 'any_email@email.com',
-      createdAt: new Date()
-    }
+  const customer: Customer = {
+    id: 'any_id',
+    name: 'any_name',
+    document: 'any_document',
+    email: 'any_email@email.com',
+    createdAt: new Date()
+  }
 
+  it('should throw if email already exists', async () => {
     jest.spyOn(customerAccountRepoSpy, 'getCustomerAccountByEmail').mockResolvedValueOnce(customer)
 
     const result = await sut.execute(customer)
@@ -32,16 +32,14 @@ describe('CreateCustomerService', () => {
   })
 
   it('get customer account by email should called only once', async () => {
-    const customer: Customer = {
-      id: 'any_id',
-      name: 'any_name',
-      document: 'any_document',
-      email: 'any_email@email.com',
-      createdAt: new Date()
-    }
-
     await sut.execute(customer)
 
     expect(customerAccountRepoSpy.getCustomerAccountByEmail).toBeCalledTimes(1)
+  })
+
+  it('should call getCustomerAccountByEmail with correct params', async () => {
+    await sut.execute(customer)
+
+    expect(customerAccountRepoSpy.getCustomerAccountByEmail).toBeCalledWith(customer.email)
   })
 })
