@@ -1,6 +1,6 @@
 export type User = {
   id: string
-  createdAt: Date
+  createdAt?: Date
   updatedAt?: Date
   deletedAt?: Date
 }

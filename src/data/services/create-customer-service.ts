@@ -11,14 +11,13 @@ export class CreateCustomerService implements CreateCustomer {
   async execute (params: CreateCustomer.params): Promise<Customer | CreateUserError> {
     const customer: Customer = {
       ...params,
-      id: '',
-      createdAt: new Date()
+      id: ''
     }
 
     const customerAlreadyExists = await this.customerAccountRepository.getCustomerAccountByEmail(customer.email)
 
     if (customerAlreadyExists !== undefined) return new CreateUserError()
 
-    return customer
+    return await this.customerAccountRepository.createCustomerAccount(customer)
   }
 }
