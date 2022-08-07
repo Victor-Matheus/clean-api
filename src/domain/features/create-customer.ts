@@ -1,4 +1,5 @@
 import { Customer } from '@/domain/models/customer'
+import { CreateUserError } from '../errors/create-user'
 
 export interface CreateCustomer {
   execute(params: CreateCustomer.params): CreateCustomer.result
@@ -11,5 +12,5 @@ export namespace CreateCustomer {
     email: string
   }
 
-  export type result = Promise<Customer>
+  export type result = Promise<Customer | CreateUserError>
 }
