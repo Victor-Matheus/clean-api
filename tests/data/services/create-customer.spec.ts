@@ -3,16 +3,21 @@ import { MockProxy, mock } from 'jest-mock-extended'
 import { ICustomerRepository } from '@/data/contracts/repositories'
 import { CreateCustomerService } from '@/data/services'
 import { CreateUserError } from '@/domain/errors/create-user'
+import { GenerateUniqueIdService } from '@/data/contracts/services'
 
 describe('CreateCustomerService', () => {
   let customerAccountRepoSpy: MockProxy<ICustomerRepository>
+
+  let generateUniqueIdService: MockProxy<GenerateUniqueIdService>
 
   let sut: CreateCustomerService
 
   beforeEach(() => {
     customerAccountRepoSpy = mock<ICustomerRepository>()
 
-    sut = new CreateCustomerService(customerAccountRepoSpy)
+    generateUniqueIdService = mock<GenerateUniqueIdService>()
+
+    sut = new CreateCustomerService(customerAccountRepoSpy, generateUniqueIdService)
   })
 
   const customer: Customer = {
@@ -43,6 +48,8 @@ describe('CreateCustomerService', () => {
   })
 
   it('should call createCustomerAccount repository with correct values', async () => {
+    jest.spyOn(generateUniqueIdService, 'generateUniqueId').mockImplementationOnce(() => customer.id)
+
     await sut.execute(customer)
 
     expect(customerAccountRepoSpy.createCustomerAccount).toBeCalledWith(customer)
