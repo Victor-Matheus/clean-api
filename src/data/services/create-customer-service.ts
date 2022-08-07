@@ -1,8 +1,8 @@
 import { CreateUserError } from '@/domain/errors/create-user'
 import { CreateCustomer } from '@/domain/features/create-customer'
 import { Customer } from '@/domain/models/customer'
-import { ICustomerRepository } from '../contracts/repositories'
-import { GenerateUniqueIdService } from '../contracts/services/generate-unique-id'
+import { ICustomerRepository } from '@/data/contracts/repositories'
+import { GenerateUniqueIdService } from '@/data/contracts/services/generate-unique-id'
 
 export class CreateCustomerService implements CreateCustomer {
   constructor (
