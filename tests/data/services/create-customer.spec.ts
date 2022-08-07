@@ -19,8 +19,7 @@ describe('CreateCustomerService', () => {
     id: 'any_id',
     name: 'any_name',
     document: 'any_document',
-    email: 'any_email@email.com',
-    createdAt: new Date()
+    email: 'any_email@email.com'
   }
 
   it('should throw if email already exists', async () => {
@@ -41,5 +40,17 @@ describe('CreateCustomerService', () => {
     await sut.execute(customer)
 
     expect(customerAccountRepoSpy.getCustomerAccountByEmail).toBeCalledWith(customer.email)
+  })
+
+  it('should call createCustomerAccount repository with correct values', async () => {
+    await sut.execute(customer)
+
+    expect(customerAccountRepoSpy.createCustomerAccount).toBeCalledWith(customer)
+  })
+
+  it('should call createCustomerAccount repository only once', async () => {
+    await sut.execute(customer)
+
+    expect(customerAccountRepoSpy.createCustomerAccount).toBeCalledTimes(1)
   })
 })
