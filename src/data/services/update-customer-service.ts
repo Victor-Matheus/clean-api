@@ -11,5 +11,11 @@ export class UpdateCustomerService implements UpdateCustomer {
     const customer = await this.customerAccountRepository.getCustomerAccountById(params.id)
 
     if (customer == null) return new UpdateUserError()
+
+    if (params.email != null) {
+      const emailAlreadyInUse = await this.customerAccountRepository.getCustomerAccountByEmail(params.email)
+
+      if (emailAlreadyInUse != null) return new UpdateUserError()
+    }
   }
 }

@@ -1,4 +1,4 @@
-// import { Customer } from '@/domain/models'
+import { Customer } from '@/domain/models'
 import { mock, MockProxy } from 'jest-mock-extended'
 import { ICustomerRepository } from '@/data/contracts/repositories'
 import { UpdateCustomerService } from '@/data/services'
@@ -15,12 +15,12 @@ describe('UpdateCustomerService', () => {
     sut = new UpdateCustomerService(customerAccountRepoSpy)
   })
 
-  // const customer: Customer = {
-  //   id: 'any_id',
-  //   name: 'any_name',
-  //   document: 'any_document',
-  //   email: 'any_email@email.com'
-  // }
+  const customer: Customer = {
+    id: 'any_id',
+    name: 'any_name',
+    document: 'any_document',
+    email: 'any_email@email.com'
+  }
 
   it('should throw if customer does not exists', async () => {
     jest.spyOn(customerAccountRepoSpy, 'getCustomerAccountById').mockResolvedValueOnce(undefined)
@@ -28,5 +28,39 @@ describe('UpdateCustomerService', () => {
     const result = await sut.execute({ id: 'any_id' })
 
     expect(result).toEqual(new UpdateUserError())
+  })
+
+  it('should call getCustomerAccountById only once', async () => {
+    jest.spyOn(customerAccountRepoSpy, 'getCustomerAccountById').mockResolvedValueOnce(undefined)
+
+    await sut.execute({ id: 'any_id' })
+
+    expect(customerAccountRepoSpy.getCustomerAccountById).toBeCalledTimes(1)
+  })
+
+  it('should throw if email already exists', async () => {
+    jest.spyOn(customerAccountRepoSpy, 'getCustomerAccountById').mockResolvedValueOnce(customer)
+    jest.spyOn(customerAccountRepoSpy, 'getCustomerAccountByEmail').mockResolvedValueOnce(customer)
+
+    const result = await sut.execute(customer)
+
+    expect(result).toEqual(new UpdateUserError())
+  })
+
+  it('should call getCustomerAccountByEmail only once if email provided', async () => {
+    jest.spyOn(customerAccountRepoSpy, 'getCustomerAccountById').mockResolvedValueOnce(customer)
+    jest.spyOn(customerAccountRepoSpy, 'getCustomerAccountByEmail').mockResolvedValueOnce(undefined)
+
+    await sut.execute({ id: 'any_id', email: 'new@email.com' })
+
+    expect(customerAccountRepoSpy.getCustomerAccountByEmail).toBeCalledTimes(1)
+  })
+
+  it('should not call getCustomerAccountByEmail if email not provided', async () => {
+    jest.spyOn(customerAccountRepoSpy, 'getCustomerAccountById').mockResolvedValueOnce(customer)
+
+    await sut.execute({ id: 'any_id' })
+
+    expect(customerAccountRepoSpy.getCustomerAccountByEmail).toBeCalledTimes(0)
   })
 })
