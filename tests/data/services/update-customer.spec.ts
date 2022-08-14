@@ -2,6 +2,7 @@
 import { mock, MockProxy } from 'jest-mock-extended'
 import { ICustomerRepository } from '@/data/contracts/repositories'
 import { UpdateCustomerService } from '@/data/services'
+import { UpdateUserError } from '@/domain/errors/update-user'
 
 describe('UpdateCustomerService', () => {
   let customerAccountRepoSpy: MockProxy<ICustomerRepository>
@@ -24,6 +25,8 @@ describe('UpdateCustomerService', () => {
   it('should throw if customer does not exists', async () => {
     jest.spyOn(customerAccountRepoSpy, 'getCustomerAccountById').mockResolvedValueOnce(undefined)
 
-    await sut.execute({ id: 'any_id' })
+    const result = await sut.execute({ id: 'any_id' })
+
+    expect(result).toEqual(new UpdateUserError())
   })
 })

@@ -1,3 +1,4 @@
+import { UpdateUserError } from '@/domain/errors/update-user'
 import { UpdateCustomer } from '@/domain/features/update-customer'
 import { ICustomerRepository } from '../contracts/repositories'
 
@@ -7,6 +8,8 @@ export class UpdateCustomerService implements UpdateCustomer {
   ) {}
 
   async execute (params: UpdateCustomer.params): UpdateCustomer.result {
-    throw new Error('Method not implemented.')
+    const customer = await this.customerAccountRepository.getCustomerAccountById(params.id)
+
+    if (customer == null) return new UpdateUserError()
   }
 }
