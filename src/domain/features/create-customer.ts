@@ -1,11 +1,11 @@
 import { Customer } from '@/domain/models/customer'
 import { CreateUserError } from '../errors/create-user'
 
-export interface CreateCustomer {
+interface CreateCustomer {
   execute(params: CreateCustomer.params): CreateCustomer.result
 }
 
-export namespace CreateCustomer {
+namespace CreateCustomer {
   export type params = {
     name: string
     document: string
@@ -13,4 +13,7 @@ export namespace CreateCustomer {
   }
 
   export type result = Promise<Customer | CreateUserError>
+
 }
+
+export { CreateCustomer }

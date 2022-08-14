@@ -8,8 +8,8 @@ interface UpdateCustomer {
 namespace UpdateCustomer {
   export type params = {
     id: string
-    name?: string
     document?: string
+    name?: string
     email?: string
   }
 
