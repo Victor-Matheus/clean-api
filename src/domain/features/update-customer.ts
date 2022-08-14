@@ -1,16 +1,18 @@
 import { Customer } from '@/domain/models'
 
-export interface UpdateCustomer {
+interface UpdateCustomer {
   execute(params: UpdateCustomer.params): UpdateCustomer.result
 }
 
-export namespace UpdateCustomer {
+namespace UpdateCustomer {
   export type params = {
     id: string
-    name: string
-    document: string
-    email: string
+    name?: string
+    document?: string
+    email?: string
   }
 
   export type result = Promise<Customer | undefined>
 }
+
+export { UpdateCustomer }
