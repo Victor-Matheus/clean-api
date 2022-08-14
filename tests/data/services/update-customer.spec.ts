@@ -63,4 +63,25 @@ describe('UpdateCustomerService', () => {
 
     expect(customerAccountRepoSpy.getCustomerAccountByEmail).toBeCalledTimes(0)
   })
+
+  it('should return a customer if updated successfully', async () => {
+    const email = 'new@email.com'
+
+    const document = '12312345611'
+
+    const customerUpdated: Customer = {
+      id: customer.id,
+      name: customer.name,
+      email,
+      document
+    }
+    jest.spyOn(customerAccountRepoSpy, 'getCustomerAccountById').mockResolvedValueOnce(customer)
+    jest.spyOn(customerAccountRepoSpy, 'getCustomerAccountByEmail').mockResolvedValueOnce(undefined)
+    jest.spyOn(customerAccountRepoSpy, 'updateCustomerAccount').mockResolvedValueOnce(customerUpdated)
+
+    const result = await sut.execute({ id: customerUpdated.id, email, document })
+
+    expect((result as Customer).email).toEqual('new@email.com')
+    expect((result as Customer).document).toEqual('12312345611')
+  })
 })

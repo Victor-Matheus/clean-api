@@ -17,5 +17,7 @@ export class UpdateCustomerService implements UpdateCustomer {
 
       if (emailAlreadyInUse != null) return new UpdateUserError()
     }
+
+    return await this.customerAccountRepository.updateCustomerAccount(Object.assign(customer, params))
   }
 }
